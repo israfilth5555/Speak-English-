@@ -9,10 +9,66 @@ const lodeLevelword=(id)=>{
     const url = `https://openapi.programming-hero.com/api/level/${id}`
    fetch(url)
    .then(res=>res.json())
-   .then(dat=>displayLevelword(dat.data));
+   .then(dat=>{
+    resetActiveButtons();///remove all cavtive class from all button
+
+       const clickBtn = document.getElementById(`lesson-btn-${id}`);
+       clickBtn.classList.add("active");
+       // add active class to the clicked button
+    //    console.log(lessonBtn);
+        displayLevelword(dat.data)
+
+    
+    
+   });
 }
+
+const resetActiveButtons = () => {
+  const removeAcative = document.querySelectorAll(".lesson-btn");
+   removeAcative.forEach(btn =>btn.classList.remove("active"))
+
+};
+const lodeWordDetail= async(id)=>{
+    const url =`https://openapi.programming-hero.com/api/word/${id}`
+    const res = await fetch(url);
+    const deatle = await res.json();
+    displayWordDetail(deatle.data);
+    
+}
+const displayWordDetail=(word)=>{
+    const modaltitrle = document.getElementById("dealts-conrainer");
+    modaltitrle.innerHTML=`<div class="">
+                <h2 class="text-2xl font-bold">${word.word} (<i class="fa-solid fa-microphone-lines"></i>  ${word.pronunciation} )</h2>
+            </div>
+            <div class="">
+                <h2 class=" font-bold"> Meaning</h2>
+                <p class="font-bangla"> ${word.meaning }</p>
+            </div>
+            <div class="">
+                <h2 class=" font-bold"> Example</h2>
+                <p class="font-bangla"> ${word.sentence}</p>
+            </div>
+            <div class=""> 
+                <h2 class=" font-bold"> Synonyms</h2>
+            </div>
+            <div class="">
+                
+                <span class="btn">${word.synonyms?.[0]}</span>
+                <span class="btn">${word.synonyms?.[1]}</span>
+                <span class="btn">${word.synonyms?.[2]}</span>
+            </div>
+    
+    `;
+
+    document.getElementById("my_modal_5").showModal();    
+
+
+}
+
+
+
 const displayLevelword =(words)=>{
-   console.log(words)
+//    console.log(words)
   const wordContaine = document.getElementById("word-container");
   wordContaine.innerHTML = "";
 
@@ -24,16 +80,16 @@ const displayLevelword =(words)=>{
          </div>`;
     return;
   }
-//   {
-//     "id": 1,
-//     "level": 1,
-//     "word": "Apple",
-//     "meaning": "আপেল",
-//     "pronunciation": "অ্যাপল"
-// }
+    //   {
+    //     "id": 1,
+    //     "level": 1,
+    //     "word": "Apple",
+    //     "meaning": "আপেল",
+    //     "pronunciation": "অ্যাপল"
+    // }
 
   words.forEach(word=> {
-    console.log(word)
+    // console.log(word)
     const card=document.createElement("div");
     card.innerHTML= `
             <div class="bg-white rounded-xl shadow-sm text-center py-10 px-5  space-y-4">
@@ -42,7 +98,7 @@ const displayLevelword =(words)=>{
             </p>
             <div class="text-2xl font-medium font-bangla ">"${word.meaning ?word.meaning : "অর্থ পাওয়া যায়নি"}/${word.pronunciation ? word.pronunciation : "উচ্চারণ পাওয়া যায়নি"}"</div>
             <div class="flex justify-between items-center">
-                <button class="btn  bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-circle-info"></i></button>
+                <button onclick="lodeWordDetail(${word.id})" class="btn  bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-circle-info"></i></button>
                 <button class="btn g-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-volume"></i></button>
             </div>
 
@@ -61,11 +117,11 @@ const displayLesson=(lessons)=>{
     //get into every lesson 
     for(let lesson of lessons){
 
-        console.log(lesson)
+        // console.log(lesson)
         //creat Element
         const btnDiv = document.createElement("div");
         btnDiv.innerHTML =`
-        <button onclick=lodeLevelword(${lesson.level_no}) href="" class="btn btn-outline  btn-primary">
+        <button id="lesson-btn-${lesson.level_no}" onclick=lodeLevelword(${lesson.level_no}) href="" class="btn btn-outline  btn-primary lesson-btn">
         <i class="fa-solid fa-book-open"></i>lesson-${lesson.level_no}</bitton>
         ` 
         //append containe
