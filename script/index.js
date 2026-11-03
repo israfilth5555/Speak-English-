@@ -18,6 +18,13 @@ const mangespinner = (statu) => {
         wordContainer.classList.remove("hidden");
     }
 }
+
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
 const lodeLesson =()=>{
     fetch("https://openapi.programming-hero.com/api/levels/all")//promise of response
     .then(res => res.json())//promise of json data
@@ -115,7 +122,7 @@ const displayLevelword =(words)=>{
             <div class="text-2xl font-medium font-bangla ">"${word.meaning ?word.meaning : "অর্থ পাওয়া যায়নি"}/${word.pronunciation ? word.pronunciation : "উচ্চারণ পাওয়া যায়নি"}"</div>
             <div class="flex justify-between items-center">
                 <button onclick="lodeWordDetail(${word.id})" class="btn  bg-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-circle-info"></i></button>
-                <button class="btn g-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-volume"></i></button>
+                <button onclick="pronounceWord('${word.word}')" class="btn g-[#1a91ff10] hover:bg-[#1a91ff80]"><i class="fa-solid fa-volume"></i></button>
             </div>
 
         </div>
